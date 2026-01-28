@@ -1,20 +1,26 @@
 
 from robot import * 
+import numpy as np
 
 nb_robots = 0
 debug = True
 
 class Robot_player(Robot):
 
-    team_name = "Dumb"
+    team_name = "HateBot"
     robot_id = -1
     iteration = 0
+    global turn
+    turn = np.array([0., 0.75, 1.5, 2.25, 3, -2.25, -1.5, -0.75])
 
     def __init__(self, x_0, y_0, theta_0, name="n/a", team="n/a"):
         global nb_robots
         self.robot_id = nb_robots
         nb_robots+=1
         super().__init__(x_0, y_0, theta_0, name=name, team=team)
+
+    def reset():
+        super().reset
 
     def step(self, sensors, sensor_view=None, sensor_robot=None, sensor_team=None):
 
@@ -41,8 +47,8 @@ class Robot_player(Robot):
                 print ("\trobot's name (if relevant)      =",sensor_robot)
                 print ("\trobot's team (if relevant)      =",sensor_team)
 
-        translation = sensors[sensor_front]*0.5 # A MODIFIER
-        rotation = 0.5 # A MODIFIER
+        translation = min(sensor_to_wall) * 4 # A MODIFIER
+        rotation = np.sum(turn * np.array(sensor_to_wall)) / 8 # A MODIFIER
 
         self.iteration = self.iteration + 1        
         return translation, rotation, False
